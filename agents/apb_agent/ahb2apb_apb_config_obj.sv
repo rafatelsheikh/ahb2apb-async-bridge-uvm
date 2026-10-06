@@ -4,7 +4,8 @@
     class ahb2apb_apb_config_obj extends uvm_object;
         `uvm_object_utils(ahb2apb_apb_config_obj)
         uvm_active_passive_enum is_active;
-        virtual ahb2apb_apb_vif my_vif;
+        virtual ahb2apb_apb_vif vif;
+        bit has_coverage = 1;
 
         function new(string name = "ahb2apb_apb_config_obj");
             super.new(name);
