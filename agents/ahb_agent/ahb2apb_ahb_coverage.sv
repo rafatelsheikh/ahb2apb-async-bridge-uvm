@@ -28,10 +28,10 @@
 
             // covering htrans transitions to make sure all legal states transitions are covered
             cp_htrans_transition: coverpoint item.htrans {
-                bins htrans_idle_to_idle = {IDLE => IDLE};
-                bins htrans_idle_to_nonseq = {IDLE => NONSEQ};
-                bins htrans_nonseq_to_idle = {NONSEQ => IDLE};
-                bins htrans_nonseq_to_nonseq = {NONSEQ => NONSEQ};
+                bins htrans_idle_to_idle = (IDLE => IDLE);
+                bins htrans_idle_to_nonseq = (IDLE => NONSEQ);
+                bins htrans_nonseq_to_idle = (NONSEQ => IDLE);
+                bins htrans_nonseq_to_nonseq = (NONSEQ => NONSEQ);
             }
 
             // covering hsize signal, it' not needed to cover illegal sizes
@@ -52,20 +52,22 @@
             // covering hwrite transitions to make sure there are transitions
             // from read to read, read to write, write to read and write to write 
             cp_hwrite_transition: coverpoint item.hwrite iff (item.htrans != IDLE) {
-                bins hwrite_read_to_read = {AHB_READ => AHB_READ};
-                bins hwrite_read_to_write = {AHB_READ => AHB_WRITE};
-                bins hwrite_write_to_read = {AHB_WRITE => AHB_READ};
-                bins hwrite_write_to_write = {AHB_WRITE => AHB_WRITE};
+                bins hwrite_read_to_read = (AHB_READ => AHB_READ);
+                bins hwrite_read_to_write = (AHB_READ => AHB_WRITE);
+                bins hwrite_write_to_read = (AHB_WRITE => AHB_READ);
+                bins hwrite_write_to_write = (AHB_WRITE => AHB_WRITE);
             }
 
             // covering hresp signal
             cp_hresp: coverpoint item.hresp iff (item.htrans != IDLE);
 
             // covering hresp transitions to make sure there are transitions
-            // from okay to error and error to okay
+            // from okay to okay, okay to error, error to okay and error to error
             cp_hresp_transition: coverpoint item.hresp iff (item.htrans != IDLE) {
-                bins hresp_okay_to_error = {AHB_OKAY => AHB_ERROR};
-                bins hresp_error_to_okay = {AHB_ERROR => AHB_OKAY};
+                bins hresp_okay_to_okay = (AHB_OKAY => AHB_OKAY);
+                bins hresp_okay_to_error = (AHB_OKAY => AHB_ERROR);
+                bins hresp_error_to_okay = (AHB_ERROR => AHB_OKAY);
+                bins hresp_error_to_error = (AHB_ERROR => AHB_ERROR);
             }
 
             // cross coverage between hwrite, haddr[1:0] and hsize to make sure
@@ -87,7 +89,7 @@
         endgroup
 
         // constructor
-        function new(string name = "ahb2apb_ahb_coverage", uvm_component parent = null);
+        function new(string name, uvm_component parent);
             super.new(name, parent);
 
             ahb_cover_item = new();
