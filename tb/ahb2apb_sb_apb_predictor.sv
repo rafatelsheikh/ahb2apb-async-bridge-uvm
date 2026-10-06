@@ -25,7 +25,9 @@
             if (in_ahb_item.is_in_progress) begin 
                 exp_apb_item = ahb2apb_apb_item_mon::type_id::create("exp_apb_item");
                 calc_exp_apb(in_ahb_item,exp_apb_item);
-                ap_exp_apb.write(exp_apb_item);
+                if (exp_apb_item.psel) begin
+                    ap_exp_apb.write(exp_apb_item);    
+                end
             end
         endfunction
 
@@ -35,43 +37,43 @@
             // signals
             //------------------------
             // PSEL
-            exp_data.PSEL = in_data.HSEL & in_data.HTRANS[1]; 
+            exp_data.psel = in_data.hsel && ((in_data.htrans == NONSEQ) || (in_data.htrans == SEQ)); 
             // HREADY neglected for PSEL as the monitor will send when operation happens so it is in meaning that it will always be high            
             
             //PADDR
-            exp_data.PADDR = in_data.HADDR;
+            exp_data.paddr = in_data.haddr;
             
             // PWRITE
-            exp_data.PWRITE = in_data.HWRITE;
+            exp_data.pwrite = (in_data.hwrite == AHB_WRITE);
             
             // PPROT
-            exp_data.PPROT = {~(in_data.HPROT[0]), 1'b0, in_data.HPROT[1]};
+            exp_data.pprot = {~(in_data.hprot[0]), 1'b0, in_data.hprot[1]};
 
             // PWDATA
-            if (in_data.HWRITE) begin
-                exp_data.PWDATA = in_data.HWDATA;
+            if (in_data.hwrite == AHB_WRITE) begin
+                exp_data.pwdata = in_data.hwdata;
             end 
             else begin
-                exp_data.PWDATA = 0;
+                exp_data.pwdata = 0;
             end
             
             // PSTRB
-            if (in_data.HWRITE) begin
-                if (in_data.HSIZE == 3'b000) begin
-                    exp_data.PSTRB = 4'b0001 << in_data.HADDR[1:0]; 
+            if (in_data.hwrite == AHB_WRITE) begin
+                if (in_data.hsize == BYTE) begin
+                    exp_data.pstrb = 4'b0001 << in_data.haddr[1:0]; 
                 end 
-                else if (in_data.HSIZE == 3'b001) begin
-                    exp_data.PSTRB = 4'b0011 << {in_data.HADDR[1], 1'b0}; 
+                else if (in_data.hsize == HALF_WORD) begin
+                    exp_data.pstrb = 4'b0011 << {in_data.haddr[1], 1'b0}; 
                 end
-                else if (in_data.HSIZE == 3'b010) begin
-                    exp_data.PSTRB = 4'b1111;
+                else if (in_data.hsize == WORD) begin
+                    exp_data.pstrb = 4'b1111;
                 end
                 else begin
-                    exp_data.PSTRB = 4'b0;
+                    exp_data.pstrb = 4'b0;
                 end    
             end
             else begin
-                exp_data.PSTRB = 4'b0;
+                exp_data.pstrb = 4'b0;
             end  
             //--------------------------
         endfunction

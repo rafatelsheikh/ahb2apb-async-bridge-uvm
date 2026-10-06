@@ -20,7 +20,7 @@
 
         // write function in the analysis export
         virtual function void write (ahb2apb_ahb_item_mon ahb_out);
-            `uvm_info("DEBUG",$sformatf("Export of the APB filter has Is in progress: %b",ahb_out.is_in_progress),UVM_HIGH)
+            `uvm_info("DEBUG",$sformatf("Export of the AHP filter has Is in progress: %b",ahb_out.is_in_progress),UVM_HIGH)
             // debug if the monitor send 2 output after each other or not 
             if (!ahb_out.is_in_progress) begin
                 ap_act_ahb.write(ahb_out);

@@ -35,13 +35,14 @@
             // signals
             // --------------------------
             // HREADYOUT
-            exp_data.HREADYOUT = in_data.PREADY & !in_data.PSLVERR;
+            exp_data.hreadyout = in_data.pready & !in_data.pslverr;
             
             // HRESP
-            exp_data.HRESP = in_data.PSLVERR & in_data.PREADY;
-            
+            if(!($cast(exp_data.hresp, in_data.pslverr & in_data.pready))) 
+                `uvm_fatal("CAST_FAILED","Casting expected HRESP tp its corresponding enum value failed")
+
             // HRDATA
-            exp_data.HRDATA = in_data.PRDATA;
+            exp_data.hrdata = in_data.prdata;
             //------------------------
         endfunction
 
