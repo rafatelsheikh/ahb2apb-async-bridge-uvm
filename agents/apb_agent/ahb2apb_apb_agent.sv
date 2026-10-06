@@ -6,7 +6,7 @@
         //class handles the slave side of the APB interface.
         ahb2apb_apb_driver driver;
         ahb2apb_apb_monitor monitor;
-        ahb2apb_apb_config config;
+        ahb2apb_apb_config_obj config;
         uvm_analysis_port #(ahb2apb_apb_item_drv) slave_agent_aport;
 
         function new(string name = "ahb2apb_apb_slave_agent", uvm_component parent = null);
@@ -15,7 +15,7 @@
 
         function void build_phase(uvm_phase phase);
             super.build_phase(phase);
-            if (!uvm_config_db #(ahb2apb_apb_config)::get(this, "", "CFG", config))
+            if (!uvm_config_db #(ahb2apb_apb_config_obj)::get(this, "", "CFG", config))
                 `uvm_fatal("apb_slave_agent_build_phase", "Unable to Get Configuration Object")
 
             if (config.is_active == UVM_ACTIVE) begin
