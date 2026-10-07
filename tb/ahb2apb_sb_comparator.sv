@@ -65,13 +65,13 @@
                     PASS_APB();
                 end 
                 else begin
-                    ERROR_APB(exp_apb_item.in2string(),exp_apb_item.out2string(),act_apb_item.out2string());
+                    ERROR_APB(exp_ahb_item.in2string(),exp_apb_item.out2string(),act_apb_item.out2string());
                 end
                 if (act_ahb_item.compare(exp_ahb_item)) begin
                     PASS_AHB();
                 end 
                 else begin
-                    ERROR_AHB(exp_ahb_item.in2string(),exp_ahb_item.out2string(),act_ahb_item.out2string());
+                    ERROR_AHB(exp_apb_item.in2string(),exp_ahb_item.out2string(),act_ahb_item.out2string());
                 end
             end
         endtask

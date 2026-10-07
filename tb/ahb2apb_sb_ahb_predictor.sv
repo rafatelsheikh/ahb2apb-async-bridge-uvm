@@ -19,12 +19,12 @@
         endfunction
 
         // write function
-        virtual function void write (ahb2apb_apb_item_mon in_apb_item);
+        virtual function void write (ahb2apb_apb_item_mon t);
             ahb2apb_ahb_item_mon exp_ahb_item;
             `uvm_info("DEBUG","Write in AHB prd analysis export",UVM_HIGH); //check monitor sending to the predictor 
-            if (!in_apb_item.is_in_progress) begin 
+            if (!t.is_in_progress) begin 
                 exp_ahb_item = ahb2apb_ahb_item_mon::type_id::create("exp_ahb_item");
-                calc_exp_ahb(in_apb_item,exp_ahb_item);
+                calc_exp_ahb(t,exp_ahb_item);
                 ap_exp_ahb.write(exp_ahb_item);
             end
         endfunction
@@ -35,7 +35,7 @@
             // signals
             // --------------------------
             // HREADYOUT
-            exp_data.hreadyout = in_data.pready & !in_data.pslverr;
+            exp_data.hreadyout = in_data.pready;
             
             // HRESP
             if(!($cast(exp_data.hresp, in_data.pslverr & in_data.pready))) 

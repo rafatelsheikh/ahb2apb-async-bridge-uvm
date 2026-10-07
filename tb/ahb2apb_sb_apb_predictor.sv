@@ -19,12 +19,12 @@
         endfunction
 
         // write function
-        virtual function void write(ahb2apb_ahb_item_mon in_ahb_item);
+        virtual function void write(ahb2apb_ahb_item_mon t);
             ahb2apb_apb_item_mon exp_apb_item;
             `uvm_info("DEBUG","Write in APB prd analysis export",UVM_HIGH); //check monitor sending to the predictor 
-            if (in_ahb_item.is_in_progress) begin 
+            if (t.is_in_progress) begin 
                 exp_apb_item = ahb2apb_apb_item_mon::type_id::create("exp_apb_item");
-                calc_exp_apb(in_ahb_item,exp_apb_item);
+                calc_exp_apb(t,exp_apb_item);
                 if (exp_apb_item.psel) begin
                     ap_exp_apb.write(exp_apb_item);    
                 end
@@ -41,7 +41,7 @@
             // HREADY neglected for PSEL as the monitor will send when operation happens so it is in meaning that it will always be high            
             
             //PADDR
-            exp_data.paddr = in_data.haddr;
+            exp_data.paddr = {(in_data.haddr >> 2), 2'b00};
             
             // PWRITE
             exp_data.pwrite = (in_data.hwrite == AHB_WRITE);
@@ -50,12 +50,7 @@
             exp_data.pprot = {~(in_data.hprot[0]), 1'b0, in_data.hprot[1]};
 
             // PWDATA
-            if (in_data.hwrite == AHB_WRITE) begin
-                exp_data.pwdata = in_data.hwdata;
-            end 
-            else begin
-                exp_data.pwdata = 0;
-            end
+            exp_data.pwdata = in_data.hwdata;
             
             // PSTRB
             if (in_data.hwrite == AHB_WRITE) begin
