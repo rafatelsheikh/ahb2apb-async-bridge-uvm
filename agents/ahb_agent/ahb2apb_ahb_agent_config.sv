@@ -12,12 +12,16 @@
         //Number of clock cycles after which AHB transfer is considered
         //stuck and an error is triggered
         local int unsigned stuck_threshold;
+        
+        // to enable or disaple coverage
+        local bit has_coverage;
 
 
         function new(string name = "ahb_agent_config");
             super.new(name);  
             active_passive = UVM_ACTIVE;
-            stuck_threshold = 200;          
+            stuck_threshold = 200;
+            has_coverage = 1;          
         endfunction
 
         // ************ helper functions ************
@@ -58,6 +62,16 @@
         // stuck_threshold var getter function
         virtual function int unsigned get_stuck_threshold();
             return stuck_threshold;
+        endfunction
+
+        // has coverage setter
+        virtual function void set_has_coverage(bit value);
+            has_coverage = value;
+        endfunction
+        
+        // has coverage getter
+        virtual function bit get_has_coverage();
+            return has_coverage;
         endfunction
 
     endclass 

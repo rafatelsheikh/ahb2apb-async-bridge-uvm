@@ -27,10 +27,15 @@
         WORD      = 3'b010
     } ahb2apb_ahb_size;
 
+    // AHB Response
+    typedef enum bit { 
+        AHB_OKAY  = 1'b0, 
+        AHB_ERROR = 1'b1
+    } ahb2apb_ahb_resp;
+
     // AHB address
     typedef bit [`AHB2APB_AHB_MAX_ADDR_WIDTH-1:0] ahb2apb_ahb_addr;
     // AHB DATA
     typedef bit [`AHB2APB_AHB_MAX_DATA_WIDTH-1:0] ahb2apb_ahb_data;
     
-
 `endif
