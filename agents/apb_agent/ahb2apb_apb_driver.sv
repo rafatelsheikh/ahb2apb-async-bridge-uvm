@@ -12,32 +12,39 @@
         endfunction
 
         task run_phase(uvm_phase phase);
-            super.run_phase(phase);
+            // Initial Values: PREADY=0, PSLVERR=0, PRDATA=0
+            idle_state();
             forever begin
-                stim_seq_item = ahb2apb_apb_item_drv::type_id::create("stim_seq_item");
                 seq_item_port.get_next_item(stim_seq_item);
-                `uvm_info("ITEM_START", stim_seq_item.convert2string_stimulus(), UVM_LOW)
-                
-                repeat (stim_seq_item.prv_item_delay) @(posedge vif.PCLK); //waiting random time
+                `uvm_info("ITEM_START", stim_seq_item.convert2string_stimulus(), UVM_MEDIUM)
 
-                //drive the signals to the interface
-                vif.PREADY <= stim_seq_item.PREADY;
-                vif.PSLVERR <= stim_seq_item.PSLVERR;
-                vif.PRDATA <= stim_seq_item.PRDATA;
+                drive_response(stim_seq_item);
 
-                @(posedge vif.PCLK); // wait 1 clock cycle for the slave to respond then go to idle state
-                idle_state(); 
-
-                repeat (stim_seq_item.aftr_item_delay) @(posedge vif.PCLK); //waiting random time
+                idle_state();
+                repeat (stim_seq_item.aftr_item_delay) @(posedge vif.PCLK); // wait random time
                 seq_item_port.item_done();
-                `uvm_info("ITEM_END", stim_seq_item.convert2string_stimulus(), UVM_LOW)
+                `uvm_info("ITEM_END", stim_seq_item.convert2string_stimulus(), UVM_MEDIUM)
             end
         endtask
 
+
+        task drive_response(ahb2apb_apb_item_drv item);
+            // wait states: PREADY stays LOW (already LOW from idle_state), PSLVERR LOW
+            repeat (item.wait_states) @(posedge vif.PCLK);
+
+            
+            vif.PREADY  <= 1'b1; //end of transaction
+            vif.PSLVERR <= item.pslverr;
+            vif.PRDATA  <= item.prdata;
+
+            // hold for exactly one edge, that is the edge where the bridge samples PREADY = 1
+            @(posedge vif.PCLK);
+        endtask
+
         function void idle_state();
-            vif.PREADY <= 1'b0;
+            vif.PREADY  <= 1'b0;
             vif.PSLVERR <= 1'b0;
-            vif.PDATA <= '0;
+            vif.PRDATA  <= '0;
         endfunction
 
     endclass
