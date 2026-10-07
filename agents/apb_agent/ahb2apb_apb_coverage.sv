@@ -85,9 +85,9 @@
 
         // write the coverage item to the coverage group ignoring the items which are in progress
         // as they don't have all the signals of a transfer
-        virtual function void write(ahb2apb_apb_item_mon item);
-            if (!item.is_in_progress) begin
-                apb_cover_item.sample(item);
+        virtual function void write(ahb2apb_apb_item_mon t);
+            if (!t.is_in_progress) begin
+                apb_cover_item.sample(t);
             end
         endfunction
     endclass
