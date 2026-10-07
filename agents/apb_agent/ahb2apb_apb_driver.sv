@@ -16,6 +16,7 @@
             forever begin
                 stim_seq_item = ahb2apb_apb_item_drv::type_id::create("stim_seq_item");
                 seq_item_port.get_next_item(stim_seq_item);
+                `uvm_info("ITEM_START", stim_seq_item.convert2string_stimulus(), UVM_LOW)
                 
                 repeat (stim_seq_item.prv_item_delay) @(posedge vif.PCLK); //waiting random time
 
@@ -29,7 +30,7 @@
 
                 repeat (stim_seq_item.aftr_item_delay) @(posedge vif.PCLK); //waiting random time
                 seq_item_port.item_done();
-                `uvm_info("abp_driver_run_phase", stim_seq_item.convert2string_stimulus(), UVM_HIGH)
+                `uvm_info("ITEM_END", stim_seq_item.convert2string_stimulus(), UVM_LOW)
             end
         endtask
 
