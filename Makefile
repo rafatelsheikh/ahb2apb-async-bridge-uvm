@@ -21,12 +21,12 @@ UCDB  := cov.ucdb
 COV   := ../$(DOC_DIR)/coverage
 
 # Default target
-all: run coverage
+all: clean run coverage
 
 # Create simulation directory
 dirs:
-	@if not exist $(SIM_DIR) mkdir $(SIM_DIR)
-	@if not exist $(DOC_DIR) mkdir $(DOC_DIR)
+	@mkdir -p $(SIM_DIR)
+	@mkdir -p $(DOC_DIR)
 
 # Compile
 compile: dirs
@@ -68,6 +68,6 @@ wave:
 
 # Clean simulation files
 clean:
-	@if exist $(SIM_DIR) rmdir /s /q $(SIM_DIR)
+	@rm -rf $(SIM_DIR)
 
 .PHONY: all dirs compile run coverage wave clean
