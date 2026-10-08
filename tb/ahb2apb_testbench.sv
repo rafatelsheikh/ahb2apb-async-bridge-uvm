@@ -72,13 +72,17 @@
             .PRDATA (apb_if.PRDATA)
         );
 
+        // connect HREADY with HREADYOUT as we have only one master and one slave
+        assign ahb_if.HREADY = ahb_if.HREADYOUT;
+
         // run test
         initial begin
-            uvm_config_db #(virtual ahb2apb_ahb_if)::set(null,"uvm_test_top","AHB_IF",ahb_if);
-            uvm_config_db #(virtual ahb2apb_apb_if)::set(null,"uvm_test_top","APB_IF",apb_if);
+            uvm_config_db #(virtual ahb2apb_ahb_if)::set(null, "uvm_test_top", "AHB_IF", ahb_if);
+            uvm_config_db #(virtual ahb2apb_apb_if)::set(null, "uvm_test_top", "APB_IF", apb_if);
             run_test("ahb2apb_test_simple");
         end
 
+        // reset at the start of the test
         initial begin
             ahb_if.HRESETn = 0;
             apb_if.PRESETn = 0;
@@ -86,6 +90,9 @@
             ahb_if.HRESETn = 1;
             apb_if.PRESETn = 1;
         end
+
+        bind cmsdk_ahb_to_apb_async ahb2apb_ahb_assertions bridge_ahb_assert (.*);
+        bind cmsdk_ahb_to_apb_async ahb2apb_apb_assertions bridge_apb_assert (.*);
 
     endmodule
 

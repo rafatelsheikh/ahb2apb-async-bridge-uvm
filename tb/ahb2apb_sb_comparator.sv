@@ -65,13 +65,13 @@
                     PASS_APB();
                 end 
                 else begin
-                    ERROR_APB(exp_ahb_item.in2string(),exp_apb_item.out2string(),act_apb_item.out2string());
+                    ERROR_APB(exp_apb_item.out2string(),act_apb_item.out2string());
                 end
                 if (act_ahb_item.compare(exp_ahb_item)) begin
                     PASS_AHB();
                 end 
                 else begin
-                    ERROR_AHB(exp_apb_item.in2string(),exp_ahb_item.out2string(),act_ahb_item.out2string());
+                    ERROR_AHB(exp_ahb_item.out2string(),act_ahb_item.out2string());
                 end
             end
         endtask
@@ -96,19 +96,19 @@
         // Error functions
         //---------------------------
         // For APB
-        function void ERROR_APB(input string in_signals, exp_out_signals, act_out_signals);
+        function void ERROR_APB(input string exp_out_signals, act_out_signals);
             string msg;
             APB_error_count++;
-            msg = $sformatf("The output signals in APB interface not match the expected ones\n  INPUT    : %s\n  EXPECTED : %s\n  ACTUAL   : %s",
-                                                                                                in_signals,     exp_out_signals, act_out_signals);
+            msg = $sformatf("The output signals in APB interface not match the expected ones\n  EXPECTED : %s\n  ACTUAL   : %s",
+                                                                                                exp_out_signals, act_out_signals);
             `uvm_error("SCB_MISMATCH",msg)
         endfunction
         // For AHB
-        function void ERROR_AHB(input string in_signals, exp_out_signals, act_out_signals);
+        function void ERROR_AHB(input string exp_out_signals, act_out_signals);
             string msg;
             AHB_error_count++;
-            msg = $sformatf("The output signals in AHB interface not match the expected ones\n  INPUT    : %s\n  EXPECTED : %s\n  ACTUAL   : %s",
-                                                                                                in_signals,     exp_out_signals, act_out_signals);
+            msg = $sformatf("The output signals in AHB interface not match the expected ones\n  EXPECTED : %s\n  ACTUAL   : %s",
+                                                                                                exp_out_signals, act_out_signals);
             `uvm_error("SCB_MISMATCH",msg)
         endfunction
         //---------------------------
