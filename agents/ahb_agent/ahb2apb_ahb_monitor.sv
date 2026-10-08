@@ -105,7 +105,9 @@ class ahb2apb_ahb_monitor extends uvm_monitor;
                         seq_item.hreadyout      = ahb_vif.HREADYOUT;
                         seq_item.hrdata         = ahb_vif.HRDATA;
                         seq_item.hresp          = ahb2apb_ahb_resp'(ahb_vif.HRESP);
-                        @(posedge ahb_vif.HCLK)
+
+                        if (ahb_vif.HTRANS != 0) @(posedge ahb_vif.HCLK)
+                        
                         seq_item.hwdata         = ahb_vif.HWDATA;
                         seq_item.hready         = ahb_vif.HREADY;
                         seq_item.length ++;
@@ -174,6 +176,24 @@ class ahb2apb_ahb_monitor extends uvm_monitor;
                         if (seq_item.htrans == IDLE)
                             `uvm_info ("ITEM_END",$sformatf("IDLE Transfere End ..."),UVM_LOW)
                         ap.write(seq_item);
+                    end
+            end
+        else if (!ahb_vif.HSEL && ahb_vif.HREADYOUT) 
+            begin
+                if (seq_item.is_in_progress) 
+                    begin
+                        seq_item.is_in_progress = 0;
+
+                        seq_item.hreadyout      = ahb_vif.HREADYOUT;
+                        seq_item.hrdata         = ahb_vif.HRDATA;
+                        seq_item.hresp          = ahb2apb_ahb_resp'(ahb_vif.HRESP);
+
+                        `uvm_info ("ITEM_END",$sformatf("Write Item Output Ready ... \n%0s", seq_item.convert2string),UVM_LOW)
+                        ap.write(seq_item);
+
+                        waiting_temp = seq_item.waiting;
+                        seq_item.reset_item();
+                        seq_item.waiting = waiting_temp;
                     end
             end
     endtask
