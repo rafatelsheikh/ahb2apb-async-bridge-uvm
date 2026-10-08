@@ -4,6 +4,8 @@
     `include "uvm_macros.svh"
     `include "ahb2apb_ahb_if.sv"
     `include "ahb2apb_test_data_type.sv"
+    `include "ahb2apb_ahb_assertions_macros.sv"
+    `include "ahb2apb_ahb_assertions.sv"
 
     package ahb2apb_ahb_pkg;
 

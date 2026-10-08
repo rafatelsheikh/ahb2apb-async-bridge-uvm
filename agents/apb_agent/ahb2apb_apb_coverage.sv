@@ -31,10 +31,10 @@
                 bins opcode_privileged = {2'b11};
             }
 
-             // covering pprot[1] signal to make sure it's never 1
-            cp_pprot_1: coverpoint item.pprot[1] {
-                bins pprot_1_0 = {1'b0};
-                illegal_bins pprot_1_1 = {1'b1};
+            // covering paddr[1:0] signal to make sure it's always 0
+            cp_paddr: coverpoint item.paddr[1:0] {
+                bins paddr_legal = {2'b00};
+                illegal_bins paddr_illegal = default;
             }
 
             // covering pwrite signal
