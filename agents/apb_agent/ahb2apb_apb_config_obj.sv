@@ -4,7 +4,7 @@
     class ahb2apb_apb_config_obj extends uvm_object;
         `uvm_object_utils(ahb2apb_apb_config_obj)
         uvm_active_passive_enum is_active;
-        virtual ahb2apb_apb_vif vif;
+        virtual ahb2apb_apb_if vif;
         bit has_coverage;
         int unsigned stuck_threshold;
 
