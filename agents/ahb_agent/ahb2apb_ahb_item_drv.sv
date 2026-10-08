@@ -65,7 +65,7 @@
             `uvm_field_int (post_drive_delay,          UVM_ALL_ON)
         `uvm_object_utils_end    
 
-        function new(name = "ahb_item_drv");
+        function new(string name = "ahb_item_drv");
             super.new(name);            
         endfunction
 
