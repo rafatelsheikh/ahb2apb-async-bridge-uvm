@@ -54,6 +54,7 @@
         `include "ahb2apb_test_base.sv"
         `include "ahb2apb_test_simple.sv"
         `include "ahb2apb_test_main.sv"
+        `include "ahb2apb_test_reset.sv"
 
     endpackage
 
