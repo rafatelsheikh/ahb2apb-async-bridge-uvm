@@ -12,12 +12,12 @@
         // clock generators 
         bit pclk;
         bit hclk;
-        always begin
+        initial begin
             #10
             pclk = ~pclk;
         end
 
-        always begin
+        initial begin
             #10
             hclk = ~hclk;
         end

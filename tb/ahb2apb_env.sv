@@ -63,7 +63,7 @@
 
         // overriding the handle reset function
         virtual function void handle_reset(uvm_phase phase);
-            sb.cmp.handle_reset(phase);
+            sb.handle_reset(phase);
         endfunction
 
         // run_phase
