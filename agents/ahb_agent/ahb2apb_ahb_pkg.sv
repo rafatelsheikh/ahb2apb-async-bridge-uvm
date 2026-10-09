@@ -13,6 +13,7 @@
         
 
         `include "ahb2apb_ahb_types.sv"
+        `include "ahb2apb_reset_handler.sv"
         
         `include "ahb2apb_ahb_item_drv.sv"
         `include "ahb2apb_ahb_item_mon.sv"
