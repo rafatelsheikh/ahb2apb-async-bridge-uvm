@@ -1,7 +1,7 @@
 `ifndef AHB2APB_ENV_SV
     `define AHB2APB_ENV_SV
 
-    class ahb2apb_env extends uvm_env;
+    class ahb2apb_env extends uvm_env implements ahb2apb_reset_handler;
         `uvm_component_utils(ahb2apb_env)
 
         // Agents
@@ -40,6 +40,56 @@
             v_seqr.ahb_sequencer = ahb_agt.ahb_sqr; //ahb seqrs
             v_seqr.apb_sequencer = apb_agt.sequencer; //apb seqrs
         endfunction
+
+        // wait AHB to assert its reset
+        protected virtual task wait_ahb_reset_start();
+            ahb_agt.cfg.wait_reset_start();
+        endtask
+
+        // wait APB to assert its reset
+        protected virtual task wait_ahb_reset_end();
+            ahb_agt.cfg.wait_reset_end();
+        endtask
+
+        // wait AHB to deassert its reset
+        protected virtual task wait_apb_reset_start();
+            apb_agt.cfg.wait_reset_start();
+        endtask
+
+        // wait AHB to deassert its reset
+        protected virtual task wait_apb_reset_end();
+            apb_agt.cfg.wait_reset_end();
+        endtask
+
+        // overriding the handle reset function
+        virtual function void handle_reset(uvm_phase phase);
+            sb.cmp.handle_reset(phase);
+        endfunction
+
+        // run_phase
+        virtual task run_phase(uvm_phase phase);
+            forever begin
+                fork
+                    begin
+                        wait_ahb_reset_start();
+                    end
+                    begin
+                        wait_apb_reset_start();
+                    end
+                join_any
+                handle_reset(phase);
+                fork
+                    begin
+                        wait_ahb_reset_end();
+                    end
+                    begin
+                        wait_apb_reset_end();
+                    end
+                join
+                // When reset deasserted release it from SB
+                sb.cmp.release_reset();
+            end
+        endtask
 
     endclass 
 `endif 
