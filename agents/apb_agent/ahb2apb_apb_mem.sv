@@ -6,7 +6,6 @@
     class ahb2apb_apb_mem extends uvm_component;
 
         `uvm_component_utils(ahb2apb_apb_mem)
-        int mem[64];
         
         protected bit [7:0] mem [int unsigned];     // APB Memory (associative array)
 
@@ -36,6 +35,14 @@
             end
             return data;
         endfunction
+
+        function void dump_to_file(string fname = "memory_dump.txt");
+            int fd = $fopen(fname, "w");
+            foreach (mem[a])
+                $fdisplay(fd, "0x%08h : 0x%02h", a, mem[a]);
+            $fclose(fd);
+        endfunction
+        
     endclass
 
 `endif

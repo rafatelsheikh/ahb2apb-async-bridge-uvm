@@ -54,15 +54,15 @@
             // Format transaction fields cleanly
             str = {str, $sformatf("\n--- [APB Monitor Item] ---")};
             str = {str, $sformatf("\n-------- [INPUTS] --------")};
-            str = {str, $sformatf("\n pready    : %0b", pready)};
-            str = {str, $sformatf("\n prdata    : %0h", prdata)};
+            str = {str, $sformatf("\n pready  : %0b", pready)};
+            str = {str, $sformatf("\n prdata  : %0h", prdata)};
             str = {str, $sformatf("\n pslverr : %0b", pslverr)};
             str = {str, $sformatf("\n------- [OUTPUTS] --------")};
             str = {str, $sformatf("\n psel      : %0b", psel)};
-            str = {str, $sformatf("\n penable     : %0b", penable)};
+            str = {str, $sformatf("\n penable   : %0b", penable)};
             str = {str, $sformatf("\n paddr     : %0h", paddr)};
-            str = {str, $sformatf("\n pwrite    : %0s", pwrite)};
-            str = {str, $sformatf("\n pwdata    : %0b", pwdata)};
+            str = {str, $sformatf("\n pwrite    : %0b", pwrite)};
+            str = {str, $sformatf("\n pwdata    : %0h", pwdata)};
             str = {str, $sformatf("\n pprot     : %0h", pprot)};
             str = {str, $sformatf("\n pstrb     : %0h", pstrb)};
             str = {str, $sformatf("\n apbactive : %0h", apbactive)};
