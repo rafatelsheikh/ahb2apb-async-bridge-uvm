@@ -13,13 +13,19 @@
         bit pclk;
         bit hclk;
         initial begin
-            #10
-            pclk = ~pclk;
+            pclk = 0;
+            forever begin
+               #10
+                pclk = ~pclk; 
+            end
         end
 
         initial begin
-            #10
-            hclk = ~hclk;
+            hclk = 0;
+            forever begin
+               #10
+                hclk = ~hclk; 
+            end
         end
 
         //interfaces
@@ -79,7 +85,7 @@
         initial begin
             uvm_config_db #(virtual ahb2apb_ahb_if)::set(null, "uvm_test_top", "AHB_IF", ahb_if);
             uvm_config_db #(virtual ahb2apb_apb_if)::set(null, "uvm_test_top", "APB_IF", apb_if);
-            run_test("ahb2apb_test_simple");
+            run_test("ahb2apb_test_main");
         end
 
         // reset at the start of the test

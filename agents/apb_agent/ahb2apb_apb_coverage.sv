@@ -99,7 +99,7 @@
 
         // build phase
         virtual function void build_phase(uvm_phase phase);
-            if(!uvm_config_db #(ahb2apb_apb_agent_config)::get(this, "", "CFG", cfg)) begin
+            if(!uvm_config_db #(ahb2apb_apb_config_obj)::get(this, "", "CFG", cfg)) begin
                 `uvm_fatal("CFG_DB_GET_FAILED", "Failed to get the Confegeration Object ...")
             end
         endfunction

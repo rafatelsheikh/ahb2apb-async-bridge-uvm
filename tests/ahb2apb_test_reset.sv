@@ -20,56 +20,60 @@
                     ahb2apb_ahb_vif ahb_vif = ahb_agent_config.get_vif();
                     virtual ahb2apb_apb_if apb_vif = apb_agent_config.vif;
 
-                    // AHB clock reset assertion
-                    repeat (3) begin
-                        @posedge(ahb_vif.HCLK);
-                    end
+                    repeat (10) begin
+                       // AHB clock reset assertion
+                        repeat (30) begin
+                            @(posedge ahb_vif.HCLK);
+                        end
 
-                    #(3ns);
+                        #(3ns);
 
-                    ahb_vif.HRESETn = 0;
-                    apb_vif.PRESETn = 0;
+                        ahb_vif.HRESETn = 0;
+                        apb_vif.PRESETn = 0;
 
-                    repeat (5) begin
-                        @posedge(ahb_vif.HCLK)
-                    end
+                        repeat (5) begin
+                            @(posedge ahb_vif.HCLK);
+                        end
 
-                    #(2ns);
+                        #(2ns);
 
-                    ahb_vif.HRESETn = 1;
-                    apb_vif.PRESETn = 1;
+                        ahb_vif.HRESETn = 1;
+                        apb_vif.PRESETn = 1;
 
-                    // APB clock reset assertion
-                    repeat (20) begin
-                        @posedge(apb_vif.PCLK);
-                    end
+                        // APB clock reset assertion
+                        repeat (50) begin
+                            @(posedge apb_vif.PCLK);
+                        end
 
-                    #(1ns);
+                        #(1ns);
 
-                    ahb_vif.HRESETn = 0;
-                    apb_vif.PRESETn = 0;
+                        ahb_vif.HRESETn = 0;
+                        apb_vif.PRESETn = 0;
 
-                    repeat (5) begin
-                        @posedge(apb_vif.PCLK)
-                    end
+                        repeat (5) begin
+                            @(posedge apb_vif.PCLK);
+                        end
 
-                    #(4ns);
+                        #(4ns);
 
-                    ahb_vif.HRESETn = 1;
-                    apb_vif.PRESETn = 1;
+                        ahb_vif.HRESETn = 1;
+                        apb_vif.PRESETn = 1;
 
-                    repeat (20) begin
-                        @posedge(apb_vif.PCLK);
+                        repeat (20) begin
+                            @(posedge apb_vif.PCLK);
+                        end 
                     end
                 end
 
                 begin
-                    ahb2apb_virtual_sequence_wr_random_err seq = ahb2apb_virtual_sequence_wr_random_err::type_id::create("seq");
-                    seq.start(env.v_seqr);
+                    forever begin
+                        ahb2apb_virtual_sequence_wr_random_err seq = ahb2apb_virtual_sequence_wr_random_err::type_id::create("seq");
+                        seq.start(env.v_seqr);    
+                    end
                 end
             join_any
 
-            disable_fork;
+            disable fork;
 
             #(100ns);
 

@@ -3,19 +3,21 @@
 
     `include "uvm_macros.svh"
     `include "ahb2apb_test_data_type.sv"
-    `include "ahb2apb_ahb_pkg.sv"
+    `include "ahb2apb_shared_pkg.sv"
     `include "ahb2apb_apb_pkg.sv"
+    `include "ahb2apb_ahb_pkg.sv"
     `include "ahb2apb_assertions_macros.sv"
     `include "ahb2apb_assertions.sv"
 
     package ahb2apb_pkg;
 
         import uvm_pkg::*;
+        import ahb2apb_shared_pkg::*;
         import ahb2apb_ahb_pkg::*;
         import ahb2apb_apb_pkg::*;
         
         `include "ahb2apb_test_data_type.sv"
-        
+
         `include "ahb2apb_reset_handler.sv"
 
         `include "ahb2apb_sb_ahb_predictor.sv"

@@ -84,7 +84,7 @@
                     item_done.wait_cycle_cnt = 0;
                     scoreboard_aport.write(item_done);   
 
-                    `uvm_info ("ITEM_START",$sformatf("Setup phase: \n%0s", item_done.convert2string),UVM_LOW)                 
+                    `uvm_info ("ITEM_START",$sformatf("Setup phase: \n%0s", item_done.convert2string),UVM_HIGH)                 
                 end
 
                 // Access phase
@@ -106,7 +106,7 @@
 
                         scoreboard_aport.write(item_done);
                         
-                        `uvm_info ("ITEM_END",$sformatf("Access phase \n%0s", item_done.convert2string),UVM_LOW)
+                        `uvm_info ("ITEM_END",$sformatf("Access phase \n%0s", item_done.convert2string),UVM_HIGH)
                         item_done.wait_cycle_cnt = 0;
                     end else begin
                         item_done.wait_cycle_cnt++;

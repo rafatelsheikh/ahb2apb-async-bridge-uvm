@@ -20,7 +20,7 @@
             apb_seq = ahb2apb_apb_sequence_random_error::type_id::create("apb_seq");
 
             // ahb sequence number of iterations setting
-            ahb_seq.num_iter = 1000;
+            ahb_seq.num_iter = 2500;
 
             // executing sequences in parallel
             fork
