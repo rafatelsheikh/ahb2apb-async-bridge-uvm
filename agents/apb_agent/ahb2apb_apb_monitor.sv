@@ -75,8 +75,8 @@
                     end
                     else if (vif.PREADY) begin
                         // Last cycle of the transfer
-                        if (!item_done.pwrite)
-                            item_done.prdata = vif.PRDATA;   // read data
+                        // if (!item_done.pwrite)
+                        item_done.prdata = vif.PRDATA;   // read data
                         item_done.pslverr    = vif.PSLVERR; 
                         item_done.pready     = vif.PREADY;
 
