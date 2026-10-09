@@ -101,6 +101,7 @@
         bind cmsdk_ahb_to_apb_async ahb2apb_apb_assertions bridge_apb_assert (.*);
         bind cmsdk_ahb_to_apb_async ahb2apb_assertions bridge_top_assert (.*);
 
+
     endmodule
 
 `endif 
