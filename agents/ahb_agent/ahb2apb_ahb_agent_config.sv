@@ -74,6 +74,23 @@
             return has_coverage;
         endfunction
 
+
+        // ************ reset helper tasks ************
+
+        // task waits for reset to start
+        virtual task wait_reset_start();
+            if(vif.HRESETn) begin
+                @(negedge vif.HRESETn);
+            end
+        endtask
+
+        // task waits for reset to end
+        virtual task wait_reset_end();
+            while (!vif.HRESETn) begin
+                @(posedge vif.HCLK);
+            end
+        endtask
+        
     endclass 
 
 `endif

@@ -1,7 +1,7 @@
 `ifndef AHB2APB_SB_COMPARATOR_SV
     `define AHB2APB_SB_COMPARATOR_SV
 
-    class ahb2apb_comparator extends uvm_component;
+    class ahb2apb_comparator extends uvm_component implements ahb2apb_reset_handler;
         `uvm_component_utils(ahb2apb_comparator)
 
         // analysis ports and fifos
@@ -20,6 +20,11 @@
         uvm_tlm_analysis_fifo #(ahb2apb_apb_item_mon) fifo_act_apb;
         //---------------------------------
 
+        // Flag that reset asserted
+        bit active_reset;
+
+        // Flag if comparison has started
+        bit compare_is_in_porgress;
 
         // constructor
         function new(string name = "ahb2apb_comparator", uvm_component parent = null);
@@ -55,36 +60,72 @@
 
         // run phase
         task run_phase (uvm_phase phase);
-            ahb2apb_apb_item_mon exp_apb_item, act_apb_item;
-            ahb2apb_ahb_item_mon exp_ahb_item, act_ahb_item;
             super.run_phase(phase);
             forever begin
-                // Fork to make the comparator compare at same time of outputs in each side 
-                // which make the debuging using waveform also easier if needed
+                wait(!active_reset);
                 fork
-                    begin
-                        fifo_exp_apb.get(exp_apb_item);
-                        fifo_act_apb.get(act_apb_item);
-                        if (act_apb_item.compare(exp_apb_item)) begin
-                            PASS_APB();
-                        end 
-                        else begin
-                            ERROR_APB(exp_apb_item.out2string(),act_apb_item.out2string());
-                        end
-                    end                
-                    begin
-                        fifo_exp_ahb.get(exp_ahb_item);
-                        fifo_act_ahb.get(act_ahb_item);
-                        if (act_ahb_item.compare(exp_ahb_item)) begin
-                            PASS_AHB();
-                        end 
-                        else begin
-                            ERROR_AHB(exp_ahb_item.out2string(),act_ahb_item.out2string());
+                    begin: Comparison
+                        forever begin
+                            check_items();    
                         end
                     end
-                join
+                    begin: Wait_activation_of_reset
+                        wait(active_reset);
+                        wait(!compare_is_in_porgress);
+                    end
+                join_any
+                disable fork;
             end
         endtask
+
+        // Scoreboard check functions
+        task automatic check_items();
+            ahb2apb_apb_item_mon exp_apb_item, act_apb_item;
+            ahb2apb_ahb_item_mon exp_ahb_item, act_ahb_item;
+            // Fork to make the comparator compare at same time of outputs in each side 
+            // which make the debuging using waveform also easier if needed
+            fork
+                begin
+                    fifo_exp_apb.get(exp_apb_item);
+                    fifo_act_apb.get(act_apb_item);
+                    compare_is_in_porgress = 1;
+                    if (act_apb_item.compare(exp_apb_item)) begin
+                        PASS_APB();
+                    end 
+                    else begin
+                        ERROR_APB(exp_apb_item.out2string(),act_apb_item.out2string());
+                    end
+                    compare_is_in_porgress = 0;
+                end                
+                begin
+                    fifo_exp_ahb.get(exp_ahb_item);
+                    fifo_act_ahb.get(act_ahb_item);
+                    compare_is_in_porgress = 1;
+                    if (act_ahb_item.compare(exp_ahb_item)) begin
+                        PASS_AHB();
+                    end 
+                    else begin
+                        ERROR_AHB(exp_ahb_item.out2string(),act_ahb_item.out2string());
+                    end
+                    compare_is_in_porgress = 0;
+                end
+            join
+        endtask
+
+        // Handle reset
+        virtual function void handle_reset (uvm_phase phase);
+            // Disable the comparison thread
+            active_reset = 1;
+            // Flush the exp fifos
+            fifo_exp_ahb.flush();
+            fifo_exp_apb.flush();
+        endfunction
+
+        // Release reset
+        virtual function void release_reset();
+            // Allow the comparison thread to run again
+            active_reset = 0;
+        endfunction
 
         // counters 
         int AHB_correct_count,APB_correct_count, AHB_error_count, APB_error_count;

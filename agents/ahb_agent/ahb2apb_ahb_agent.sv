@@ -5,7 +5,7 @@
 *This File represents the AHB Agent that Includes   *
 *The Monitor, Driver and Coverage                   *
 ******************************************************/
-class ahb2apb_ahb_agent extends uvm_agent;
+class ahb2apb_ahb_agent extends uvm_agent implements ahb2apb_reset_handler;
 
     ahb2apb_ahb_driver ahb_drv;
     ahb2apb_ahb_sequencer ahb_sqr;
@@ -55,5 +55,37 @@ class ahb2apb_ahb_agent extends uvm_agent;
             ahb_mon.ap.connect(ahb_cov.analysis_export);
     endfunction
 
+    // Watches Till Reset is asserted
+    protected virtual task wait_reset_start();
+      cfg.wait_reset_start();
+    endtask
+
+    // Once Reset is asserted This task waits till its deassertion
+    protected virtual task wait_reset_end();
+      cfg.wait_reset_end();
+    endtask
+
+    // Implementaion of Reset Handling
+    virtual function void handle_reset(uvm_phase phase);
+        uvm_component children[$];
+        
+        get_children(children);
+        
+        foreach(children[idx]) begin
+            ahb2apb_reset_handler reset_handler;
+            
+            if($cast(reset_handler, children[idx])) begin
+                reset_handler.handle_reset(phase);
+            end
+        end
+    endfunction
+
+    virtual task run_phase(uvm_phase phase);
+        forever begin
+            wait_reset_start();
+            handle_reset(phase);
+            wait_reset_end();
+        end
+    endtask
 endclass
 `endif

@@ -1,8 +1,21 @@
 `ifndef AHB2APB_APB_COVERAGE_SV
     `define AHB2APB_APB_COVERAGE_SV
 
-    class ahb2apb_apb_coverage extends uvm_subscriber #(ahb2apb_apb_item_mon);
+    class ahb2apb_apb_coverage extends uvm_subscriber #(ahb2apb_apb_item_mon) implements ahb2apb_reset_handler;
         `uvm_component_utils(ahb2apb_apb_coverage)
+
+        // agent config handle
+        ahb2apb_apb_config_obj cfg;
+
+        // coverage group to sample that there is a reset asserted during an ongoing transaction
+        covergroup apb_reset_cover_item with function sample(bit psel);
+            option.per_instance = 1;
+
+            cp_reset_during_transfer: coverpoint psel {
+                bins not_during_transfer = {1'b0};
+                bins during_transfer = {1'b1};
+            }
+        endgroup
 
         // coverage group sampling the apb item
         covergroup apb_cover_item with function sample(ahb2apb_apb_item_mon item);
@@ -81,6 +94,14 @@
             super.new(name, parent);
 
             apb_cover_item = new();
+            apb_reset_cover_item = new();
+        endfunction
+
+        // build phase
+        virtual function void build_phase(uvm_phase phase);
+            if(!uvm_config_db #(ahb2apb_apb_config_obj)::get(this, "", "CFG", cfg)) begin
+                `uvm_fatal("CFG_DB_GET_FAILED", "Failed to get the Confegeration Object ...")
+            end
         endfunction
 
         // write the coverage item to the coverage group ignoring the items which are in progress
@@ -89,6 +110,11 @@
             if (!t.is_in_progress) begin
                 apb_cover_item.sample(t);
             end
+        endfunction
+
+        // overriding the handle reset function to sample to the reset cover item
+        virtual function void handle_reset(uvm_phase phase);
+            apb_reset_cover_item.sample(cfg.vif.PSEL);
         endfunction
     endclass
 

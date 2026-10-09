@@ -6,13 +6,16 @@
     `include "ahb2apb_test_data_type.sv"
     `include "ahb2apb_ahb_assertions_macros.sv"
     `include "ahb2apb_ahb_assertions.sv"
+    `include "ahb2apb_shared_pkg.sv"
 
     package ahb2apb_ahb_pkg;
 
         import uvm_pkg::*;
+        import ahb2apb_shared_pkg::*;
         
 
         `include "ahb2apb_ahb_types.sv"
+        `include "ahb2apb_reset_handler.sv"
         
         `include "ahb2apb_ahb_item_drv.sv"
         `include "ahb2apb_ahb_item_mon.sv"

@@ -3,13 +3,16 @@
 `ifndef AHB2APB_APB_MONITOR_SV
     `define AHB2APB_APB_MONITOR_SV
 
-    class ahb2apb_apb_monitor extends uvm_monitor;
+    class ahb2apb_apb_monitor extends uvm_monitor implements ahb2apb_reset_handler;
 
         `uvm_component_utils(ahb2apb_apb_monitor)
 
         virtual ahb2apb_apb_if vif;
         ahb2apb_apb_config_obj cfg;
+
         integer stuck_threshold;
+
+        protected process process_collect_transactions;
 
         // Sends observed requests to the sequencer FIFO
         uvm_analysis_port #(ahb2apb_apb_item_mon) request_aport;
@@ -36,7 +39,19 @@
             vif = cfg.vif;
         endfunction
 
-        task run_phase(uvm_phase phase);
+        virtual task run_phase(uvm_phase phase);
+            forever begin
+                fork
+                    begin
+                        wait_reset_end();
+                        collect_transactions();
+                        disable fork;
+                    end
+                join
+            end
+        endtask
+
+        task collect_transaction();
             forever begin
                 @(posedge vif.PCLK);
 
@@ -69,7 +84,7 @@
                     item_done.wait_cycle_cnt = 0;
                     scoreboard_aport.write(item_done);   
 
-                    `uvm_info ("ITEM_START",$sformatf("Setup phase: \n%0s", item_done.convert2string),UVM_LOW)                 
+                    `uvm_info ("ITEM_START",$sformatf("Setup phase: \n%0s", item_done.convert2string),UVM_HIGH)                 
                 end
 
                 // Access phase
@@ -91,7 +106,7 @@
 
                         scoreboard_aport.write(item_done);
                         
-                        `uvm_info ("ITEM_END",$sformatf("Access phase \n%0s", item_done.convert2string),UVM_LOW)
+                        `uvm_info ("ITEM_END",$sformatf("Access phase \n%0s", item_done.convert2string),UVM_HIGH)
                         item_done.wait_cycle_cnt = 0;
                     end else begin
                         item_done.wait_cycle_cnt++;
@@ -108,6 +123,28 @@
         function void report_phase(uvm_phase phase);
             super.report_phase(phase);
             memory.dump_to_file();
+        endfunction
+
+        protected virtual task collect_transactions();
+            fork
+                begin
+                    process_collect_transactions = process::self();
+                    forever begin
+                        collect_transaction();
+                    end
+                end 
+            join
+        endtask
+
+        virtual task wait_reset_end();
+            cfg.wait_reset_end();
+        endtask
+
+        virtual function void handle_reset(uvm_phase phase);
+            if(process_collect_transactions != null) begin
+                process_collect_transactions.kill();
+                process_collect_transactions = null;
+            end
         endfunction
     
     endclass

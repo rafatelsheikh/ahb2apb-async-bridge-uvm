@@ -1,7 +1,7 @@
 `ifndef AHB2APB_SCOREBOARD_SV
     `define AHB2APB_SCOREBOARD_SV
 
-        class ahb2apb_scoreboard extends uvm_scoreboard;
+        class ahb2apb_scoreboard extends uvm_scoreboard implements ahb2apb_reset_handler;
         `uvm_component_utils(ahb2apb_scoreboard)
 
             // analysis ports
@@ -49,6 +49,12 @@
                 apb_out_filter.ap_act_apb.connect(cmp.axp_act_apb); // fifo take the apb actual signals
                 ahb_out_filter.ap_act_ahb.connect(cmp.axp_act_ahb); // fifo take the ahp actual signals
             endfunction
+
+            // Handle reset
+        virtual function void handle_reset (uvm_phase phase);
+            cmp.handle_reset(phase);
+            prd_apb.data_mem = 0; 
+        endfunction
 
         endclass
 
