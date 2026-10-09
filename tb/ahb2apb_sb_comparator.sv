@@ -18,7 +18,9 @@
         // actual apb signals
         uvm_analysis_export #(ahb2apb_apb_item_mon) axp_act_apb;  
         uvm_tlm_analysis_fifo #(ahb2apb_apb_item_mon) fifo_act_apb;
-        
+        //---------------------------------
+
+
         // constructor
         function new(string name = "ahb2apb_comparator", uvm_component parent = null);
             super.new(name,parent);
@@ -57,22 +59,30 @@
             ahb2apb_ahb_item_mon exp_ahb_item, act_ahb_item;
             super.run_phase(phase);
             forever begin
-                fifo_exp_apb.get(exp_apb_item);
-                fifo_act_apb.get(act_apb_item);
-                fifo_exp_ahb.get(exp_ahb_item);
-                fifo_act_ahb.get(act_ahb_item);
-                if (act_apb_item.compare(exp_apb_item)) begin
-                    PASS_APB();
-                end 
-                else begin
-                    ERROR_APB(exp_apb_item.out2string(),act_apb_item.out2string());
-                end
-                if (act_ahb_item.compare(exp_ahb_item)) begin
-                    PASS_AHB();
-                end 
-                else begin
-                    ERROR_AHB(exp_ahb_item.out2string(),act_ahb_item.out2string());
-                end
+                // Fork to make the comparator compare at same time of outputs in each side 
+                // which make the debuging using waveform also easier if needed
+                fork
+                    begin
+                        fifo_exp_apb.get(exp_apb_item);
+                        fifo_act_apb.get(act_apb_item);
+                        if (act_apb_item.compare(exp_apb_item)) begin
+                            PASS_APB();
+                        end 
+                        else begin
+                            ERROR_APB(exp_apb_item.out2string(),act_apb_item.out2string());
+                        end
+                    end                
+                    begin
+                        fifo_exp_ahb.get(exp_ahb_item);
+                        fifo_act_ahb.get(act_ahb_item);
+                        if (act_ahb_item.compare(exp_ahb_item)) begin
+                            PASS_AHB();
+                        end 
+                        else begin
+                            ERROR_AHB(exp_ahb_item.out2string(),act_ahb_item.out2string());
+                        end
+                    end
+                join
             end
         endtask
 
