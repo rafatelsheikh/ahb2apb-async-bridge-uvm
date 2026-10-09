@@ -33,7 +33,10 @@
                     assert final (HREADYOUT === 1'b1); 
 
                 ERR_HRESP_IS_NOT_OKAY_DURING_RESET:
-                    assert final (HRESP === 1'b0);  
+                    assert final (HRESP === 1'b0);
+
+                ERR_HTRANS_IS_NOT_IDLE_DURING_RESET:
+                    assert final (HTRANS === 2'b00);  
             end
         end
 
