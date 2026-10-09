@@ -16,11 +16,11 @@
         
         `include "ahb2apb_apb_config_obj.sv"
         
+        `include "ahb2apb_apb_mem.sv"
         `include "ahb2apb_apb_sequencer.sv"
         `include "ahb2apb_apb_driver.sv"
         `include "ahb2apb_apb_monitor.sv"
         `include "ahb2apb_apb_coverage.sv"
-
         
         `include "ahb2apb_apb_agent.sv"
 

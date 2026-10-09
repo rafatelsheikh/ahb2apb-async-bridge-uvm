@@ -10,6 +10,7 @@
         ahb2apb_apb_config_obj cfg;
         ahb2apb_apb_coverage coverage;
         uvm_analysis_port #(ahb2apb_apb_item_mon) slave_agent_aport;
+        ahb2apb_apb_mem memory;
 
         function new(string name = "ahb2apb_apb_slave_agent", uvm_component parent = null);
             super.new(name, parent);
@@ -29,6 +30,7 @@
 
             //build monitor
             monitor = ahb2apb_apb_monitor::type_id::create("monitor", this);
+            memory = ahb2apb_apb_mem::type_id::create("memory", this);
 
             //build coverage if the configuration object has coverage enabled
             if (cfg.has_coverage)
@@ -42,8 +44,10 @@
 
             monitor.vif = cfg.vif;
             monitor.scoreboard_aport.connect(slave_agent_aport);
+            monitor.memory = memory;
             if (cfg.is_active == UVM_ACTIVE) begin
                 driver.vif = cfg.vif;
+                sequencer.memory = memory;
                 driver.seq_item_port.connect(sequencer.seq_item_export);  // driver <-> sequencer
                 monitor.request_aport.connect(sequencer.request_export);  // monitor -> sequencer FIFO
             end
