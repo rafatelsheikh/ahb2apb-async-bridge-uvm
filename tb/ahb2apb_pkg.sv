@@ -13,6 +13,8 @@
         import ahb2apb_apb_pkg::*;
         
         `include "ahb2apb_test_data_type.sv"
+        
+        `include "ahb2apb_reset_handler.sv"
 
         `include "ahb2apb_sb_ahb_predictor.sv"
         `include "ahb2apb_sb_apb_predictor.sv"
