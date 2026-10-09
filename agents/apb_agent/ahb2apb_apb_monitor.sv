@@ -15,6 +15,8 @@
         uvm_analysis_port #(ahb2apb_apb_item_mon) request_aport;
         // Sends completed transfers 
         uvm_analysis_port #(ahb2apb_apb_item_mon) scoreboard_aport;
+        // APB Memory
+        ahb2apb_apb_mem memory;
         
         ahb2apb_apb_item_mon item_mon;
         ahb2apb_apb_item_mon item_done;   // completed item
@@ -39,8 +41,10 @@
                 @(posedge vif.PCLK);
 
                 // Reset: drop 
-                if (!vif.PRESETn)
+                if (!vif.PRESETn) begin
+                    memory.init();
                     continue;
+                end
 
                 // Setup phase
                 if (vif.PSEL && !vif.PENABLE) begin
@@ -77,10 +81,14 @@
                         // Last cycle of the transfer
                         // if (!item_done.pwrite)
                         item_done.prdata = vif.PRDATA;   // read data
-                        item_done.pslverr    = vif.PSLVERR; 
-                        item_done.pready     = vif.PREADY;
+                        item_done.pslverr = vif.PSLVERR; 
+                        item_done.pready = vif.PREADY;
 
                         item_done.is_in_progress = 0;
+                    
+                        if (item_done.pwrite && !item_done.pslverr)
+                            memory.write(item_done.paddr, item_done.pwdata, item_done.pstrb);
+
                         scoreboard_aport.write(item_done);
                         
                         `uvm_info ("ITEM_END",$sformatf("Access phase \n%0s", item_done.convert2string),UVM_LOW)
@@ -96,6 +104,11 @@
                 end
             end
         endtask 
+
+        function void report_phase(uvm_phase phase);
+            super.report_phase(phase);
+            memory.dump_to_file();
+        endfunction
     
     endclass
 
