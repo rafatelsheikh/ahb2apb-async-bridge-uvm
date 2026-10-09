@@ -10,6 +10,7 @@
         ahb2apb_apb_config_obj cfg;
         ahb2apb_apb_coverage coverage;
         uvm_analysis_port #(ahb2apb_apb_item_mon) slave_agent_aport;
+        ahb2apb_apb_mem memory;
 
         //Constructor for the slave agent
         function new(string name = "ahb2apb_apb_slave_agent", uvm_component parent = null);

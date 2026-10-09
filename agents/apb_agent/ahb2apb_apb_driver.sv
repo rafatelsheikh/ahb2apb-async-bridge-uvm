@@ -19,7 +19,7 @@
         forever begin
             fork begin
                 wait_reset_end();
-                driver_response(stim_seq_item);
+                drive_response(stim_seq_item);
 
                 disable fork; // to ensure that if there any other processes running in driver_response are killed when reset is asserted
             end
@@ -36,7 +36,7 @@
                 process_driver_response = process::self();
                 forever begin 
                     seq_item_port.get_next_item(item);
-                    `uvm_info("ITEM_START", item.convert2string_stimulus(), UVM_MEDIUM)
+                    `uvm_info("ITEM_START", item.convert2string_stimulus(), UVM_HIGH)
 
                     // wait states: PREADY stays LOW (already LOW from idle_state), PSLVERR LOW
                     repeat (item.wait_states) @(posedge vif.PCLK);
@@ -52,7 +52,7 @@
                     idle_state();
                     repeat (item.aftr_item_delay) @(posedge vif.PCLK); // wait random time
                     seq_item_port.item_done();
-                    `uvm_info("ITEM_END", item.convert2string_stimulus(), UVM_MEDIUM)
+                    `uvm_info("ITEM_END", item.convert2string_stimulus(), UVM_HIGH)
                 end
             end
             join

@@ -18,12 +18,12 @@
         endfunction
 
         //Getter for the APB virtual interface
-        virtual function cfs_apb_vif get_vif();
+        virtual function virtual ahb2apb_apb_if get_vif();
             return vif;
         endfunction
         
         //Setter for the APB virtual interface
-        virtual function void set_vif(cfs_apb_vif value);
+        virtual function void set_vif(virtual ahb2apb_apb_if value);
         if(vif == null) begin
             vif = value;
             
@@ -36,12 +36,12 @@
 
         //Getter for the APB Active/Passive control
         virtual function uvm_active_passive_enum get_active_passive();
-            return active_passive;
+            return is_active;
         endfunction
         
         //Setter for the APB Active/Passive control
         virtual function void set_active_passive(uvm_active_passive_enum value);
-            active_passive = value;
+            is_active = value;
         endfunction
 
         //Getter for the has_coverage control field
@@ -62,10 +62,6 @@
         //Setter for the has_checks control field
         virtual function void set_has_checks(bit value);
             has_checks = value;
-            
-            if(vif != null) begin
-            vif.has_checks = has_checks;
-            end
         endfunction
 
         //Getter for the stuck threshold
