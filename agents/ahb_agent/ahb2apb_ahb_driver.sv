@@ -62,7 +62,7 @@
                         else begin
                             drive_transaction(item);
 
-                            `uvm_info("ITEM_END", $sformatf("Driving: %0s", item.convert2string()), UVM_LOW)
+                            `uvm_info("ITEM_END", $sformatf("Driving: %0s", item.convert2string()), UVM_HIGH)
 
                             seq_item_port.item_done();    
                         end       
@@ -77,7 +77,7 @@
         protected virtual task drive_transaction(ahb2apb_ahb_item_drv item);
             ahb2apb_ahb_vif vif = cfg.get_vif();
 
-            `uvm_info("ITEM_START", $sformatf("Driving: %0s", item.convert2string()), UVM_LOW)
+            `uvm_info("ITEM_START", $sformatf("Driving: %0s", item.convert2string()), UVM_HIGH)
             
             
             // running address phase and data phase in parrallel for overlappings
