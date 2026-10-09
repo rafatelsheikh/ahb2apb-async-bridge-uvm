@@ -29,8 +29,6 @@
             item.hprot = 0;
             item.haddr = $random();
             item.hwdata = $random();
-            item.pre_drive_delay = 0;
-            item.post_drive_delay = 0;
 
             finish_item(item);
 
@@ -44,8 +42,6 @@
             item_2.hprot = 0;
             item_2.haddr = $random();
             item_2.hwdata = 0;
-            item_2.pre_drive_delay = 0;
-            item_2.post_drive_delay = 0;
 
             finish_item(item_2);
         endtask

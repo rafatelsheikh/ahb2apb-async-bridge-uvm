@@ -25,14 +25,31 @@
         `include "ahb2apb_env.sv"
 
         `include "ahb2apb_ahb_sequence_simple.sv"
+        `include "ahb2apb_ahb_sequence_nonoverlapped_write.sv"
+        `include "ahb2apb_ahb_sequence_nonoverlapped_read.sv"
+        `include "ahb2apb_ahb_sequence_overlapped_write.sv"
+        `include "ahb2apb_ahb_sequence_overlapped_read.sv"
+        `include "ahb2apb_ahb_sequence_random_rw.sv"
 
         `include "ahb2apb_apb_sequence_simple.sv"
+        `include "ahb2apb_apb_sequence_okay_no_wait.sv"
+        `include "ahb2apb_apb_sequence_okay_random_wait.sv"
+        `include "ahb2apb_apb_sequence_random_error.sv"
 
         `include "ahb2apb_virtual_sequence_base.sv"
         `include "ahb2apb_virtual_sequence_simple.sv"
+        `include "ahb2apb_virtual_sequence_write_no_wait.sv"
+        `include "ahb2apb_virtual_sequence_write_wait.sv"
+        `include "ahb2apb_virtual_sequence_write_overlapped.sv"
+        `include "ahb2apb_virtual_sequence_read_no_wait.sv"
+        `include "ahb2apb_virtual_sequence_read_wait.sv"
+        `include "ahb2apb_virtual_sequence_read_overlapped.sv"
+        `include "ahb2apb_virtual_sequence_wr_okay.sv"
+        `include "ahb2apb_virtual_sequence_wr_random_err.sv"
 
         `include "ahb2apb_test_base.sv"
         `include "ahb2apb_test_simple.sv"
+        `include "ahb2apb_test_main.sv"
 
     endpackage
 

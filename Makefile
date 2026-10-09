@@ -11,7 +11,7 @@ INCDIRS := +incdir+../agents/ahb_agent \
 
 # Simulation
 TOP  := ahb2apb_testbench
-TEST := ahb2apb_test_simple
+TEST := ahb2apb_test_main
 
 # Log file (transcript), saved in sim/
 LOG  := run.log
