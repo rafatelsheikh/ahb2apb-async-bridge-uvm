@@ -72,12 +72,10 @@ class ahb2apb_ahb_agent extends uvm_agent implements ahb2apb_reset_handler;
         get_children(children);
         
         foreach(children[idx]) begin
-            cfs_apb_reset_handler reset_handler;
+            ahb2apb_reset_handler reset_handler;
             
             if($cast(reset_handler, children[idx])) begin
                 reset_handler.handle_reset(phase);
-            end else begin
-                `uvm_fatal("CAST_FAILED", "Failed To Cast Reset Handler to Children...")
             end
         end
     endfunction
