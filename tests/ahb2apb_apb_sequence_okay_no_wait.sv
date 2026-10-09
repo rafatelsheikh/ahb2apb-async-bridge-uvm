@@ -32,7 +32,7 @@
                     seq_item_res.prdata = 0;    
                 end 
                 else begin
-                    seq_item_res.prdata = $random(); 
+                    seq_item_res.prdata = p_sequencer.memory.read(seq_item_req.paddr);
                 end
 
                 finish_item(seq_item_res); 

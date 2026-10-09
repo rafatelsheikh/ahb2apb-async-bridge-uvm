@@ -25,7 +25,7 @@
                     seq_item_res.prdata = 0;    
                 end 
                 else begin
-                    seq_item_res.prdata = $random(); 
+                    seq_item_res.prdata = p_sequencer.memory.read(seq_item_req.paddr);
                 end
                 
                 if (!seq_item_res.randomize())
