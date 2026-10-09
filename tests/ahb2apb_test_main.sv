@@ -12,7 +12,7 @@
         // run phase
         virtual task run_phase(uvm_phase phase);
             // non overlapped write no wait test
-            phase.raise_objection(this, "TEST_DONE");
+            phase.raise_objection(this, "MAIN_TEST_DONE");
 
             #(100ns);
 
@@ -117,7 +117,7 @@
 
             #(100ns);
 
-            phase.drop_objection(this, "TEST_DONE");
+            phase.drop_objection(this, "MAIN_TEST_DONE");
         endtask
     endclass
 
