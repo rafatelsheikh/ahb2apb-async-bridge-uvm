@@ -47,6 +47,9 @@
                 end 
                 else begin
                     drive_transaction(item);
+
+                    `uvm_info("ITEM_END", $sformatf("Driving: %0s", item.convert2string()), UVM_LOW)
+
                     seq_item_port.item_done();    
                 end
                        
@@ -61,22 +64,16 @@
 
             `uvm_info("ITEM_START", $sformatf("Driving: %0s", item.convert2string()), UVM_LOW)
             
-            // random pre drive delay
-            for (int i = 1; i < item.pre_drive_delay; i++) begin
-                    @(posedge vif.HCLK);
-            end
-
+            
+            // running address phase and data phase in parrallel for overlappings
             fork
                 data_phase(prev_item);
                 addr_phase(item);
             join
-
+            // save item for its data phase
             prev_item = item;
             
-            // random post drive delay
-            for(int i = 0; i < item.post_drive_delay; i++) begin
-                @(posedge vif.HCLK);
-            end
+            
         endtask
 
         // address phase task

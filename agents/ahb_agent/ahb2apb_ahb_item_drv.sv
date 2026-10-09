@@ -18,18 +18,6 @@
         // data
         rand ahb2apb_ahb_data hwdata;
         
-        // pre&post item delays
-        rand int unsigned pre_drive_delay;
-        rand int unsigned post_drive_delay;
-
-        // ** constraints **
-        constraint pre_drive_delay_default {
-            soft pre_drive_delay <= 5;
-        }
-
-        constraint post_drive_delay_default {
-            soft post_drive_delay <= 5;
-        }
 
         constraint selection_default {
             soft hsel dist {1 := 95, 0 := 5};
@@ -61,8 +49,6 @@
             `uvm_field_int (hsel,                      UVM_ALL_ON)
             `uvm_field_int (haddr,                     UVM_ALL_ON)
             `uvm_field_int (hwdata,                    UVM_ALL_ON)
-            `uvm_field_int (pre_drive_delay,           UVM_ALL_ON)
-            `uvm_field_int (post_drive_delay,          UVM_ALL_ON)
         `uvm_object_utils_end    
 
         function new(string name = "ahb_item_drv");
@@ -78,8 +64,6 @@
                 result = $sformatf("%s, data: %0x", result, hwdata);
             end
             
-            result = $sformatf("%s, pre_drive_delay: %0d, post_drive_delay: %0d", 
-                                result, pre_drive_delay, post_drive_delay);
 
             return result;
         endfunction
