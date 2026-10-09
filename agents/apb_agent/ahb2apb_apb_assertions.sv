@@ -68,6 +68,9 @@
         ERR_PENABLE_seq_is_wrong_A: `assert_clk (PSEL |-> !PENABLE |=> PENABLE);
         ERR_PENABLE_seq_is_wrong_C: `cover_assert_clk (PSEL |-> !PENABLE |=> PENABLE);
 
+        ERR_PSEL_is_deasserted_while_PENABLE_asserted_A: `assert_clk ($rose(PENABLE) |-> PSEL);
+        ERR_PSEL_is_deasserted_while_PENABLE_asserted_C: `cover_assert_clk ($rose(PENABLE) |-> PSEL);
+
         ERR_PENABLE_held_until_PREADY_A: `assert_clk ($rose(PENABLE) |-> (PENABLE throughout (PREADY[->1])));
         ERR_PENABLE_held_until_PREADY_C: `cover_assert_clk ($rose(PENABLE) |-> (PENABLE throughout (PREADY[->1])));
 

@@ -9,6 +9,8 @@
 
         // Requests received from the monitor
         uvm_tlm_analysis_fifo #(ahb2apb_apb_item_mon) request_fifo;
+        // APB Memory
+        ahb2apb_apb_mem memory;
 
         // Receives monitor transactions
         uvm_analysis_export #(ahb2apb_apb_item_mon) request_export;

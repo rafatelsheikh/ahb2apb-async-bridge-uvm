@@ -8,18 +8,18 @@
         `uvm_object_utils(ahb2apb_apb_item_mon)
 
         // APB outputs of the bridge
-        logic        psel;
-        logic        penable;
-        logic [31:0] paddr;
-        logic        pwrite;
-        logic [31:0] pwdata;
-        logic [3:0]  pstrb;
-        logic [2:0]  pprot;
-        logic        apbactive;
+        logic psel;
+        logic penable;
+        logic [`AHB2APB_APB_MAX_DATA_WIDTH-1:0] paddr;
+        logic pwrite;
+        logic [`AHB2APB_APB_MAX_DATA_WIDTH-1:0] pwdata;
+        logic [3:0] pstrb;
+        logic [2:0] pprot;
+        logic apbactive;
 
         // APB inputs to the bridge
         logic        pready;
-        logic [31:0] prdata;
+        logic [`AHB2APB_APB_MAX_DATA_WIDTH-1:0] prdata;
         logic        pslverr;
 
         bit is_in_progress;
@@ -52,17 +52,17 @@
             str = super.convert2string(); 
 
             // Format transaction fields cleanly
-            str = {str, $sformatf("\n--- [AHB Monitor Item] ---")};
+            str = {str, $sformatf("\n--- [APB Monitor Item] ---")};
             str = {str, $sformatf("\n-------- [INPUTS] --------")};
-            str = {str, $sformatf("\n pready    : %0b", pready)};
-            str = {str, $sformatf("\n prdata    : %0h", prdata)};
+            str = {str, $sformatf("\n pready  : %0b", pready)};
+            str = {str, $sformatf("\n prdata  : %0h", prdata)};
             str = {str, $sformatf("\n pslverr : %0b", pslverr)};
             str = {str, $sformatf("\n------- [OUTPUTS] --------")};
             str = {str, $sformatf("\n psel      : %0b", psel)};
-            str = {str, $sformatf("\n penable     : %0b", penable)};
+            str = {str, $sformatf("\n penable   : %0b", penable)};
             str = {str, $sformatf("\n paddr     : %0h", paddr)};
-            str = {str, $sformatf("\n pwrite    : %0s", hwrite.name())};
-            str = {str, $sformatf("\n pwdata    : %0b", pwdata)};
+            str = {str, $sformatf("\n pwrite    : %0b", pwrite)};
+            str = {str, $sformatf("\n pwdata    : %0h", pwdata)};
             str = {str, $sformatf("\n pprot     : %0h", pprot)};
             str = {str, $sformatf("\n pstrb     : %0h", pstrb)};
             str = {str, $sformatf("\n apbactive : %0h", apbactive)};

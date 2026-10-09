@@ -7,6 +7,9 @@
         // analysis port send to comparator
         uvm_analysis_port #(ahb2apb_apb_item_mon) ap_exp_apb;
 
+        // Memory to keep the address
+        bit [31:0] data_mem;
+
         // constructor
         function new (string name = "ahb2apb_apb_predictor", uvm_component parent = null);
             super.new(name,parent);
@@ -50,7 +53,13 @@
             exp_data.pprot = {~(in_data.hprot[0]), 1'b0, in_data.hprot[1]};
 
             // PWDATA
-            exp_data.pwdata = in_data.hwdata;
+            if(in_data.hwrite) begin
+                exp_data.pwdata = in_data.hwdata;
+                data_mem = in_data.hwdata;    
+            end
+            else begin
+                exp_data.pwdata = data_mem;
+            end
             
             // PSTRB
             if (in_data.hwrite == AHB_WRITE) begin
