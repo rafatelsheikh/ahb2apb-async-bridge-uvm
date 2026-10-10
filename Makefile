@@ -12,6 +12,7 @@ INCDIRS := +incdir+../agents/ahb_agent \
 # Simulation
 TOP  := ahb2apb_testbench
 TEST := ahb2apb_test_main
+SEED := random
 
 # Log file (transcript), saved in sim/
 LOG  := run.log
@@ -19,6 +20,7 @@ LOG  := run.log
 # Coverage 
 UCDB  := cov.ucdb
 COV   := ../$(DOC_DIR)/coverage
+COV_TXT   := ../$(DOC_DIR)/coverage.txt
 
 # Default target
 all: clean run coverage
@@ -45,13 +47,16 @@ compile: dirs
 
 # Run simulation
 run: compile
+	@echo "Running simulation with seed: $(SEED)"
 	cd $(SIM_DIR) && vsim -c \
 		-coverage \
+		-sv_seed $(SEED) \
 		-voptargs="+acc" \
 		-l $(LOG) \
 		work.$(TOP) \
 		+UVM_TESTNAME=$(TEST) \
-		-do "coverage save -onexit $(UCDB); do ../scripts/wave.tcl; run -all; quit -f"
+		-do "do ../scripts/coverage_exclution.tcl; coverage save -onexit $(UCDB); \
+		 do ../scripts/wave.tcl; run -all; quit -f"
 
 
 # Coverage reporting
@@ -60,6 +65,12 @@ coverage: run
 		-details \
 		-html \
 		-output $(COV) \
+		$(UCDB)
+
+coverage_txt:
+	cd $(SIM_DIR) && vcover report \
+		-details \
+		-output $(COV_TXT) \
 		$(UCDB)
 
 # Open wavefor
