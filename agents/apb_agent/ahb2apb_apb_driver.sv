@@ -48,6 +48,14 @@
 
                     // hold for exactly one edge, that is the edge where the bridge samples PREADY = 1
                     @(posedge vif.PCLK);
+                    
+                    // Keeping PREADY HIGH for 2 Cycles at certian sequences to test a certain codition in RTL
+                    if (item.keep_pready) begin
+                        vif.PREADY  <= 1'b1;
+                        vif.PSLVERR <= 1'b0;
+                        vif.PRDATA  <= '0;
+                        @(posedge vif.PCLK);
+                    end
 
                     idle_state();
                     repeat (item.aftr_item_delay) @(posedge vif.PCLK); // wait random time

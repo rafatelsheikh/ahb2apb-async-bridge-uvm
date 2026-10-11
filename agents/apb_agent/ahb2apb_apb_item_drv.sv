@@ -8,6 +8,8 @@
         rand int unsigned wait_states;   // number of extra ACCESS cycles with PREADY = 0
         rand int unsigned aftr_item_delay; // delay random after the item is processed
 
+        rand bit keep_pready;
+
         //uvm_object_utils macros needed for methods
         `uvm_object_utils_begin(ahb2apb_apb_item_drv)
             `uvm_field_int(pslverr, UVM_ALL_ON)
@@ -24,6 +26,7 @@
         constraint pslverr_c     {soft pslverr dist {0:/90, 1:/10};}
         constraint wait_states_c {soft wait_states dist {0:/50, [1:3]:/40, [4:8]:/10};}
         constraint aftr_item_delay_c {soft aftr_item_delay inside {[1:5]};}
+        constraint keep_pready_defualt {soft keep_pready == 0;}
 
         function string convert2string();
             return $sformatf("%s, WAIT_STATES = %0d, PSLVERR = 0b%0b, PRDATA = 0x%0h",
