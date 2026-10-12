@@ -11,7 +11,7 @@ scripts/      Simulation and waveform/coverage scripts
 tb/           Testbench top, environment, scoreboard, assertions
 tests/        Directed and virtual-sequence test scenarios
 docs/coverage/ QuestaSim HTML coverage report
-docs/images/   Testbench and scoreboard architecture diagrams
+docs   Testbench and scoreboard architecture diagrams and coverage file
 Makefile      Compile, run, multiple test ,and coverage targets
 ```
 
@@ -19,12 +19,12 @@ Makefile      Compile, run, multiple test ,and coverage targets
 
 ### UVM Testbench Architecture
 
-![AHB-to-APB bridge UVM testbench architecture](docs/images/ahb2apb_testbench_architecture.png)
+![AHB-to-APB bridge UVM testbench architecture](docs/AHB2ABP_TB_ARCHITECTURE.png)
 
 
 ### Scoreboard Architecture
 
-![Self-checking scoreboard architecture](docs/images/scoreboard_architecture.png)
+![Self-checking scoreboard architecture](docs/Scorebaord_architecture.png)
 
 
 ## Key Features
