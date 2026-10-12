@@ -43,6 +43,7 @@
         `include "ahb2apb_apb_sequence_okay_no_wait.sv"
         `include "ahb2apb_apb_sequence_okay_random_wait.sv"
         `include "ahb2apb_apb_sequence_random_error.sv"
+        `include "ahb2apb_apb_sequence_okay_no_wait_hold_pready.sv"
 
         `include "ahb2apb_virtual_sequence_base.sv"
         `include "ahb2apb_virtual_sequence_simple.sv"
@@ -56,6 +57,10 @@
         `include "ahb2apb_test_same_clk.sv"
         `include "ahb2apb_test_double_clk.sv"
         `include "ahb2apb_test_shift_clk.sv"
+
+        `include "ahb2apb_test_reset_AHB_in_APB_access_phase.sv"
+        `include "ahb2apb_test_req_ack_recovery.sv"
+        `include "ahb2apb_test_apb_pready_idle.sv"
 
     endpackage
 
