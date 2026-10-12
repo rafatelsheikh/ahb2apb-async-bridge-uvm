@@ -1,6 +1,7 @@
 `ifndef AHB2APB_TESTBENCH_SV
     `define AHB2APB_TESTBENCH_SV
     
+    `include "uvm_macros.svh"
     `include "ahb2apb_ahb_if.sv"
     `include "ahb2apb_apb_if.sv"
     `include "ahb2apb_test_data_type.sv"
@@ -12,10 +13,13 @@
         // clock generators 
         bit pclk;
         bit hclk;
+        real apb_clk = 10.0;
+        real ahb_clk = 10.0;
+
         initial begin
             pclk = 0;
             forever begin
-               #10
+               #(apb_clk)
                 pclk = ~pclk; 
             end
         end
@@ -23,7 +27,7 @@
         initial begin
             hclk = 0;
             forever begin
-               #10
+               #(ahb_clk)
                 hclk = ~hclk; 
             end
         end
@@ -95,6 +99,26 @@
             #(20ns);
             ahb_if.HRESETn = 1;
             apb_if.PRESETn = 1;
+        end
+
+        // getting the clock configuration object
+        initial begin
+            ahb2apb_clock_config clk_cfg;
+
+            #1;
+
+            if (uvm_config_db#(ahb2apb_clock_config)::get(null, "uvm_test_top", "CLK_CFG", clk_cfg)) begin
+                `uvm_info("TB_TOP", $sformatf("Clock Config Found! APB Clock: %0f, AHB CLOCK: %0f, Phase Shift = %0b", clk_cfg.apb_clk, clk_cfg.ahb_clk, clk_cfg.phase_shift_180), UVM_LOW)
+
+                apb_clk = clk_cfg.apb_clk;
+                ahb_clk = clk_cfg.ahb_clk;
+
+                if (clk_cfg.phase_shift_180) begin
+                    pclk = 1;
+                end
+            end else begin
+                `uvm_warning("TB_TOP", "CLK_CFG not found in database! Falling back to defaults.")
+            end
         end
 
         bind cmsdk_ahb_to_apb_async ahb2apb_ahb_assertions bridge_ahb_assert (.*);

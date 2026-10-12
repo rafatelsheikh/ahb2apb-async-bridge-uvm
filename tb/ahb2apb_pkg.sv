@@ -20,6 +20,8 @@
 
         `include "ahb2apb_reset_handler.sv"
 
+        `include "ahb2apb_clock_config.sv"
+
         `include "ahb2apb_sb_ahb_predictor.sv"
         `include "ahb2apb_sb_apb_predictor.sv"
         `include "ahb2apb_sb_comparator.sv"
@@ -44,19 +46,16 @@
 
         `include "ahb2apb_virtual_sequence_base.sv"
         `include "ahb2apb_virtual_sequence_simple.sv"
-        `include "ahb2apb_virtual_sequence_write_no_wait.sv"
-        `include "ahb2apb_virtual_sequence_write_wait.sv"
-        `include "ahb2apb_virtual_sequence_write_overlapped.sv"
-        `include "ahb2apb_virtual_sequence_read_no_wait.sv"
-        `include "ahb2apb_virtual_sequence_read_wait.sv"
-        `include "ahb2apb_virtual_sequence_read_overlapped.sv"
-        `include "ahb2apb_virtual_sequence_wr_okay.sv"
-        `include "ahb2apb_virtual_sequence_wr_random_err.sv"
+        `include "ahb2apb_virtual_sequence_parameterized.sv"
 
         `include "ahb2apb_test_base.sv"
         `include "ahb2apb_test_simple.sv"
         `include "ahb2apb_test_main.sv"
         `include "ahb2apb_test_reset.sv"
+        `include "ahb2apb_test_parameterized_clk.sv"
+        `include "ahb2apb_test_same_clk.sv"
+        `include "ahb2apb_test_double_clk.sv"
+        `include "ahb2apb_test_shift_clk.sv"
 
     endpackage
 

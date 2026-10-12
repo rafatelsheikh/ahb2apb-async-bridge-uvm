@@ -19,7 +19,8 @@
             `uvm_info("TEST", "non overlapped write no wait test started", UVM_LOW)
 
             begin
-                ahb2apb_virtual_sequence_write_no_wait seq = ahb2apb_virtual_sequence_write_no_wait::type_id::create("seq");
+                ahb2apb_virtual_sequence_parameterized #(.ahb_sequence_t(ahb2apb_ahb_sequence_nonoverlapped_write), .apb_sequence_t(ahb2apb_apb_sequence_okay_no_wait)) seq
+                    = ahb2apb_virtual_sequence_parameterized #(.ahb_sequence_t(ahb2apb_ahb_sequence_nonoverlapped_write), .apb_sequence_t(ahb2apb_apb_sequence_okay_no_wait))::type_id::create("seq");
                 seq.start(env.v_seqr);
             end
 
@@ -32,7 +33,8 @@
             `uvm_info("TEST", "non overlapped write wait test started", UVM_LOW)
 
             begin
-                ahb2apb_virtual_sequence_write_wait seq = ahb2apb_virtual_sequence_write_wait::type_id::create("seq");
+                ahb2apb_virtual_sequence_parameterized #(.ahb_sequence_t(ahb2apb_ahb_sequence_nonoverlapped_write), .apb_sequence_t(ahb2apb_apb_sequence_okay_random_wait)) seq
+                    = ahb2apb_virtual_sequence_parameterized #(.ahb_sequence_t(ahb2apb_ahb_sequence_nonoverlapped_write), .apb_sequence_t(ahb2apb_apb_sequence_okay_random_wait))::type_id::create("seq");
                 seq.start(env.v_seqr);
             end
 
@@ -45,7 +47,8 @@
             `uvm_info("TEST", "overlapped write wait test ended", UVM_LOW)
 
             begin
-                ahb2apb_virtual_sequence_write_overlapped seq = ahb2apb_virtual_sequence_write_overlapped::type_id::create("seq");
+                ahb2apb_virtual_sequence_parameterized #(.ahb_sequence_t(ahb2apb_ahb_sequence_overlapped_write), .apb_sequence_t(ahb2apb_apb_sequence_okay_random_wait)) seq
+                    = ahb2apb_virtual_sequence_parameterized #(.ahb_sequence_t(ahb2apb_ahb_sequence_overlapped_write), .apb_sequence_t(ahb2apb_apb_sequence_okay_random_wait))::type_id::create("seq");
                 seq.start(env.v_seqr);
             end
 
@@ -58,7 +61,8 @@
             `uvm_info("TEST", "non overlapped read no wait test started", UVM_LOW)
 
             begin
-                ahb2apb_virtual_sequence_read_no_wait seq = ahb2apb_virtual_sequence_read_no_wait::type_id::create("seq");
+                ahb2apb_virtual_sequence_parameterized #(.ahb_sequence_t(ahb2apb_ahb_sequence_nonoverlapped_read), .apb_sequence_t(ahb2apb_apb_sequence_okay_no_wait)) seq
+                    = ahb2apb_virtual_sequence_parameterized #(.ahb_sequence_t(ahb2apb_ahb_sequence_nonoverlapped_read), .apb_sequence_t(ahb2apb_apb_sequence_okay_no_wait))::type_id::create("seq");
                 seq.start(env.v_seqr);
             end
 
@@ -71,7 +75,8 @@
             `uvm_info("TEST", "non overlapped read wait test starteded", UVM_LOW)
 
             begin
-                ahb2apb_virtual_sequence_read_wait seq = ahb2apb_virtual_sequence_read_wait::type_id::create("seq");
+                ahb2apb_virtual_sequence_parameterized #(.ahb_sequence_t(ahb2apb_ahb_sequence_nonoverlapped_read), .apb_sequence_t(ahb2apb_apb_sequence_okay_random_wait)) seq
+                    = ahb2apb_virtual_sequence_parameterized #(.ahb_sequence_t(ahb2apb_ahb_sequence_nonoverlapped_read), .apb_sequence_t(ahb2apb_apb_sequence_okay_random_wait))::type_id::create("seq");
                 seq.start(env.v_seqr);
             end
 
@@ -84,7 +89,8 @@
             `uvm_info("TEST", "overlapped read wait test started", UVM_LOW)
 
             begin
-                ahb2apb_virtual_sequence_read_overlapped seq = ahb2apb_virtual_sequence_read_overlapped::type_id::create("seq");
+                ahb2apb_virtual_sequence_parameterized #(.ahb_sequence_t(ahb2apb_ahb_sequence_overlapped_read), .apb_sequence_t(ahb2apb_apb_sequence_okay_random_wait)) seq
+                    = ahb2apb_virtual_sequence_parameterized #(.ahb_sequence_t(ahb2apb_ahb_sequence_overlapped_read), .apb_sequence_t(ahb2apb_apb_sequence_okay_random_wait))::type_id::create("seq");
                 seq.start(env.v_seqr);
             end
 
@@ -97,7 +103,8 @@
             `uvm_info("TEST", "write read okay test started", UVM_LOW)
 
             begin
-                ahb2apb_virtual_sequence_wr_okay seq = ahb2apb_virtual_sequence_wr_okay::type_id::create("seq");
+                ahb2apb_virtual_sequence_parameterized #(.ahb_sequence_t(ahb2apb_ahb_sequence_random_rw), .apb_sequence_t(ahb2apb_apb_sequence_okay_random_wait)) seq
+                    = ahb2apb_virtual_sequence_parameterized #(.ahb_sequence_t(ahb2apb_ahb_sequence_random_rw), .apb_sequence_t(ahb2apb_apb_sequence_okay_random_wait))::type_id::create("seq");
                 seq.start(env.v_seqr);
             end
 
@@ -109,7 +116,9 @@
             `uvm_info("TEST", "write read random error test started", UVM_LOW)
 
             begin
-                ahb2apb_virtual_sequence_wr_random_err seq = ahb2apb_virtual_sequence_wr_random_err::type_id::create("seq");
+                ahb2apb_virtual_sequence_parameterized #(.ahb_sequence_t(ahb2apb_ahb_sequence_random_rw), .apb_sequence_t(ahb2apb_apb_sequence_random_error)) seq
+                    = ahb2apb_virtual_sequence_parameterized #(.ahb_sequence_t(ahb2apb_ahb_sequence_random_rw), .apb_sequence_t(ahb2apb_apb_sequence_random_error))::type_id::create("seq");
+                seq.set_num_iter(2500);
                 seq.start(env.v_seqr);
             end
 
@@ -172,7 +181,9 @@
 
                 begin
                     forever begin
-                        ahb2apb_virtual_sequence_wr_random_err seq = ahb2apb_virtual_sequence_wr_random_err::type_id::create("seq");
+                        ahb2apb_virtual_sequence_parameterized #(.ahb_sequence_t(ahb2apb_ahb_sequence_random_rw), .apb_sequence_t(ahb2apb_apb_sequence_random_error)) seq
+                            = ahb2apb_virtual_sequence_parameterized #(.ahb_sequence_t(ahb2apb_ahb_sequence_random_rw), .apb_sequence_t(ahb2apb_apb_sequence_random_error))::type_id::create("seq");
+                        seq.set_num_iter(2500);
                         seq.start(env.v_seqr);    
                     end
                 end

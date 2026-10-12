@@ -67,7 +67,9 @@
 
                 begin
                     forever begin
-                        ahb2apb_virtual_sequence_wr_random_err seq = ahb2apb_virtual_sequence_wr_random_err::type_id::create("seq");
+                        ahb2apb_virtual_sequence_parameterized #(.ahb_sequence_t(ahb2apb_ahb_sequence_random_rw), .apb_sequence_t(ahb2apb_apb_sequence_random_error)) seq
+                            = ahb2apb_virtual_sequence_parameterized #(.ahb_sequence_t(ahb2apb_ahb_sequence_random_rw), .apb_sequence_t(ahb2apb_apb_sequence_random_error))::type_id::create("seq");
+                        seq.set_num_iter(2500);
                         seq.start(env.v_seqr);    
                     end
                 end
